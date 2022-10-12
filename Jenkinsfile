@@ -44,7 +44,6 @@ pipeline {
         stage("Run Automation Testing") {
             steps {
               dir("${automationdir}") {
-                sh "javac -version && java -version"
                 sh "chmod +x run-testing.sh"
                 sh "./run-testing.sh ${postman_api_key} ${postman_collection_id} ${postman_environment_id}| tee output.log"
 //                 sh '''
