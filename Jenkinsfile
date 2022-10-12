@@ -37,7 +37,7 @@ pipeline {
             steps {
                 sh "mkdir -p ${automationdir} || true"
                 dir("${automationdir}") {
-                    git branch: 'master', credentialsId: '6bc0c9da-a591-4b32-89a7-7cf05af05288', url: 'https://aabdulsalams@bitbucket.org/aabdulsalams/testing-ci-postman.git'
+                    git branch: 'master', url: 'https://aabdulsalams@bitbucket.org/aabdulsalams/testing-ci-postman.git'
                 }
             }
         }
