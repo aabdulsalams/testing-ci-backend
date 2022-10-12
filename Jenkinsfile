@@ -44,8 +44,9 @@ pipeline {
         stage("Run Automation Testing") {
             steps {
               dir("${automationdir}") {
-                sh "chmod +x run-testing.sh"
-                sh "./run-testing.sh ${postman_api_key} ${postman_collection_id} ${postman_environment_id}| tee output.log"
+                  sh "pwd && ls -al"
+//                 sh "chmod +x run-testing.sh"
+//                 sh "./run-testing.sh ${postman_api_key} ${postman_collection_id} ${postman_environment_id}| tee output.log"
 //                 sh '''
 //                     if grep -q "Failures: 0, Skips: 0" output.log; then 
 //                         echo "Test run successfully! :)"
