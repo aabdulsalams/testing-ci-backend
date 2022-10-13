@@ -70,7 +70,7 @@ pipeline {
                    withCredentials([file(credentialsId: 'cloud-storage-object-admin', variable: 'GC_KEY')]) {
                        sh "ls -al"
                        sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
-                       sh "gsutil cp -R report-${BUILD_NUMBER}.html gs://${storage_endpoint}"
+                       sh "gsutil cp report-${BUILD_NUMBER}.html gs://${storage_endpoint}"
                     }
                }
             }
