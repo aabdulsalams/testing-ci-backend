@@ -79,7 +79,7 @@ pipeline {
         // create stage to send link to qa
         stage("Send Automation Result to Discord") {
            steps {
-               sh "curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"Posted Via Command line\"}" "https://discord.com/api/webhooks/${webhook_credential}"
+               sh "curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"Posted Via Command line\"}" https://discord.com/api/webhooks/${webhook_credential}"
             }
         }
     }
