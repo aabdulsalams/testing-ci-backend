@@ -82,7 +82,7 @@ pipeline {
            steps {
                sh """
                     curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
-                    --data '{"content": "Result = gs://${storage_endpoint}/report-${BUILD_NUMBER}.html"}' \
+                    --data '{"content": "Result = https://storage.googleapis.com/${storage_endpoint}/report-${BUILD_NUMBER}.html"}' \
                     ${webhook_url}
                """
            }
