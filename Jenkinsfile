@@ -80,11 +80,11 @@ pipeline {
         // create stage to send link to qa
         stage("Send Automation Result to Discord") {
            steps {
-               sh '''
+               sh """
                     curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
-                    --data '{"content": "${BUILD_NUMBER}"}' \
+                    --data '{"content": "Result = gs://${storage_endpoint}/report-${BUILD_NUMBER}.html"}' \
                     ${webhook_url}
-               '''
+               """
            }
         }
     }
