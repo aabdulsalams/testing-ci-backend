@@ -82,7 +82,7 @@ pipeline {
            steps {
                sh '''
                     curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
-                    --data '{"content": ${BUILD_NUMBER}}' \
+                    --data '{"content": "${BUILD_NUMBER}"}' \
                     ${webhook_url}
                '''
            }
