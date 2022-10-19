@@ -72,7 +72,7 @@ pipeline {
                        sh "ls -al"
                        sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
                        sh "gsutil cp report-${BUILD_NUMBER}.html gs://${storage_endpoint}/"
-                       sh "echo 'gs://${storage_endpoint}/report-${BUILD_NUMBER}.html' >  "
+//                        sh "echo 'gs://${storage_endpoint}/report-${BUILD_NUMBER}.html' >  "
                     }
                }
            }
