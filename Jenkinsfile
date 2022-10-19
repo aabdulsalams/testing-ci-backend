@@ -72,6 +72,7 @@ pipeline {
                        sh "ls -al"
                        sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
                        sh "gsutil cp report-${BUILD_NUMBER}.html gs://${storage_endpoint}/"
+                       sh "echo 'gs://${storage_endpoint}/report-${BUILD_NUMBER}.html' >  "
                     }
                }
            }
@@ -81,7 +82,7 @@ pipeline {
            steps {
                sh '''
                     curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
-                    --data '{"content": "gs://${env.storage_endpoint}/report-${env.BUILD_NUMBER}.html"}' \
+                    --data '{"content": ${BUILD_NUMBER}}' \
                     ${webhook_url}
                '''
            }
