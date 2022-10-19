@@ -81,7 +81,7 @@ pipeline {
            steps {
                sh '''
                     curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
-                    --data '{"content": "gs://${storage_endpoint}/report-${BUILD_NUMBER}.html"}' \
+                    --data '{"content": "gs://${env.storage_endpoint}/report-${env.BUILD_NUMBER}.html"}' \
                     ${webhook_url}
                '''
            }
