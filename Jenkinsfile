@@ -80,7 +80,9 @@ pipeline {
         stage("Send Automation Result to Discord") {
            steps {
                sh '''
-                    curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data '{"content": "Berhasil"}' ${webhook_url}
+                    curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
+                    --data '{"content": "Berhasil", "footer": {"text": "gs://${storage_endpoint}/report-${BUILD_NUMBER}.html"}}' \
+                    ${webhook_url}
                '''
            }
         }
