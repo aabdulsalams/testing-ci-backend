@@ -80,7 +80,7 @@ pipeline {
         stage("Send Automation Result to Discord") {
            steps {
                sh '''
-                    curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data "{\"content\": \"Bismillah\"}" https://discord.com/api/webhooks/1030375663921803275/kLGXXrD2JY3WHnW3jBj2jKZ2zy6tQO2z6AcAp0dX6VfdutWbNREWFmbCjlzGmKV1T8Xj
+                    curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data '{"content": "Posted Via Command line"}' https://discord.com/api/webhooks/1030375663921803275/kLGXXrD2JY3WHnW3jBj2jKZ2zy6tQO2z6AcAp0dX6VfdutWbNREWFmbCjlzGmKV1T8Xj
                '''
            }
         }
