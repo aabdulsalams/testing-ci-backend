@@ -53,7 +53,7 @@ pipeline {
               dir("${automationdir}") {
                   sh "pwd && ls -al"
                   sh "chmod +x run-testing.sh"
-                  sh "./run-testing.sh ${postman_api_key} ${postman_collection_id} ${postman_environment_id} ${BUILD_NUMBER}| tee output.log"
+                  sh "./run-testing.sh ${postman_api_key} ${postman_collection_id} ${postman_environment_id} ${BUILD_NUMBER} | tee output.log"
 //                 sh '''
 //                     if grep -q "Failures: 0, Skips: 0" output.log; then 
 //                         echo "Test run successfully! :)"
@@ -69,7 +69,7 @@ pipeline {
            steps {
                dir("${automationdir}") {
                    withCredentials([file(credentialsId: 'cloud-storage-object-admin', variable: 'GC_KEY')]) {
-                       sh "ls -al"
+                       sh "ls -al && cat o"
                        sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
                        sh "gsutil cp report-${BUILD_NUMBER}.html gs://${storage_endpoint}/"
 //                        sh "echo 'gs://${storage_endpoint}/report-${BUILD_NUMBER}.html' >  "
