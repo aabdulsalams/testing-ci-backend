@@ -65,28 +65,28 @@ pipeline {
                }
             }
         }
-//         stage("Store Automation Result to Cloud Storage") {
-//            steps {
-//                dir("${automationdir}") {
-//                    withCredentials([file(credentialsId: 'cloud-storage-object-admin', variable: 'GC_KEY')]) {
-//                        sh "ls -al"
-//                        sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
-//                        sh "gsutil cp report-${BUILD_NUMBER}.html gs://${storage_endpoint}/"
-// //                        sh "echo 'gs://${storage_endpoint}/report-${BUILD_NUMBER}.html' >  "
-//                     }
-//                }
-//            }
-//         }
-//         // create stage to send link to qa
-//         stage("Send Automation Result to Discord") {
-//            steps {
-//                sh """
-//                     curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
-//                     --data '{"content": "Result = https://storage.googleapis.com/${storage_endpoint}/report-${BUILD_NUMBER}.html"}' \
-//                     ${webhook_url}
-//                """
-//            }
-//         }
+        stage("Store Automation Result to Cloud Storage") {
+           steps {
+               dir("${automationdir}") {
+                   withCredentials([file(credentialsId: 'cloud-storage-object-admin', variable: 'GC_KEY')]) {
+                       sh "ls -al"
+                       sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
+                       sh "gsutil cp report-${BUILD_NUMBER}.html gs://${storage_endpoint}/"
+//                        sh "echo 'gs://${storage_endpoint}/report-${BUILD_NUMBER}.html' >  "
+                    }
+               }
+           }
+        }
+        // create stage to send link to qa
+        stage("Send Automation Result to Discord") {
+           steps {
+               sh """
+                    curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
+                    --data '{"content": "Result = https://storage.googleapis.com/${storage_endpoint}/report-${BUILD_NUMBER}.html"}' \
+                    ${webhook_url}
+               """
+           }
+        }
     }
     
     post {
