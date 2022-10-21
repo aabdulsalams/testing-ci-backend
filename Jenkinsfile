@@ -63,15 +63,7 @@ pipeline {
                    withCredentials([file(credentialsId: 'cloud-storage-object-admin', variable: 'GC_KEY')]) {
                        sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
                        sh "gsutil cp report-${BUILD_NUMBER}.html gs://${storage_endpoint}/"
-                       sh '''
-                            if grep -q "0" test-summaries.log; then 
-                                echo "Test run successfully! :)"
-                            else
-                                echo "There are failure! :("
-                                exit 1
-                            fi
-                       ''' 
-                    }
+                   }
                }
            }
         }
@@ -83,6 +75,14 @@ pipeline {
                     --data '{"content": "Result = https://storage.googleapis.com/${storage_endpoint}/report-${BUILD_NUMBER}.html"}' \
                     ${webhook_url}
                """
+               sh '''
+                    if grep -q "0" test-summaries.log; then 
+                        echo "Test run successfully! :)"
+                    else
+                        echo "There are failure! :("
+                        exit 1
+                    fi
+               ''' 
            }
         }
     }
