@@ -53,39 +53,38 @@ pipeline {
               dir("${automationdir}") {
                   sh "pwd && ls -al"
                   sh "chmod +x run-testing.sh"
-                  sh "./run-testing.sh ${postman_api_key} ${postman_collection_id} ${postman_environment_id} ${BUILD_NUMBER} | tee output.log"
-//                 sh '''
-//                     if grep -q "Failures: 0, Skips: 0" output.log; then 
-//                         echo "Test run successfully! :)"
-//                     else
-//                         echo "There are failure/skip! :("
-//                         exit 1
-//                     fi
-//                 '''         
+                  sh "./run-testing.sh ${postman_api_key} ${postman_collection_id} ${postman_environment_id} ${BUILD_NUMBER} | tee output.log"        
                }
             }
         }
-//         stage("Store Automation Result to Cloud Storage") {
-//            steps {
-//                dir("${automationdir}") {
-//                    withCredentials([file(credentialsId: 'cloud-storage-object-admin', variable: 'GC_KEY')]) {
-//                        sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
-//                        sh "gsutil cp report-${BUILD_NUMBER}.html gs://${storage_endpoint}/"
-// //                        sh "echo 'gs://${storage_endpoint}/report-${BUILD_NUMBER}.html' >  "
-//                     }
-//                }
-//            }
-//         }
-//         // create stage to send link to qa
-//         stage("Send Automation Result to Discord") {
-//            steps {
-//                sh """
-//                     curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
-//                     --data '{"content": "Result = https://storage.googleapis.com/${storage_endpoint}/report-${BUILD_NUMBER}.html"}' \
-//                     ${webhook_url}
-//                """
-//            }
-//         }
+        stage("Store Automation Result to Cloud Storage") {
+           steps {
+               dir("${automationdir}") {
+                   withCredentials([file(credentialsId: 'cloud-storage-object-admin', variable: 'GC_KEY')]) {
+                       sh "gcloud auth activate-service-account --key-file=${GC_KEY}"
+                       sh "gsutil cp report-${BUILD_NUMBER}.html gs://${storage_endpoint}/"
+                       sh '''
+                            if grep -q "0" test-summaries.log; then 
+                                echo "Test run successfully! :)"
+                            else
+                                echo "There are failure! :("
+                                exit 1
+                            fi
+                       ''' 
+                    }
+               }
+           }
+        }
+        // create stage to send link to qa
+        stage("Send Automation Result to Discord") {
+           steps {
+               sh """
+                    curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
+                    --data '{"content": "Result = https://storage.googleapis.com/${storage_endpoint}/report-${BUILD_NUMBER}.html"}' \
+                    ${webhook_url}
+               """
+           }
+        }
     }
     
     post {
