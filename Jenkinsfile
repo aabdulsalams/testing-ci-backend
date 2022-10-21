@@ -76,10 +76,10 @@ pipeline {
                     ${webhook_url}
                """
                sh '''
-                    if grep -q "0" test-summaries.log; then 
+                    if grep -q "0" failed-test-summaries.log && grep -q "0" skipped-test-summaries.log; then 
                         echo "Test run successfully! :)"
                     else
-                        echo "There are failure! :("
+                        echo "There are failure/skip! :("
                         exit 1
                     fi
                ''' 
