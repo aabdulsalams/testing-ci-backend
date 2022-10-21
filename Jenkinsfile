@@ -55,7 +55,6 @@ pipeline {
                   sh "chmod +x run-testing.sh"
                   sh "./run-testing.sh ${postman_api_key} ${postman_collection_id} ${postman_environment_id} ${BUILD_NUMBER} | tee output.log"
                   sh "sleep 10"
-                  sh "cat test-summaries.log"
 //                 sh '''
 //                     if grep -q "Failures: 0, Skips: 0" output.log; then 
 //                         echo "Test run successfully! :)"
