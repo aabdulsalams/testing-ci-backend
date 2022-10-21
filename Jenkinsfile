@@ -75,14 +75,20 @@ pipeline {
                     --data '{"content": "Result = https://storage.googleapis.com/${storage_endpoint}/report-${BUILD_NUMBER}.html"}' \
                     ${webhook_url}
                """
-               sh '''
-                    if grep -q "0" failed-test-summaries.log && grep -q "0" skipped-test-summaries.log; then 
-                        echo "Test run successfully! :)"
-                    else
-                        echo "There are failure/skip! :("
-                        exit 1
-                    fi
-               ''' 
+           }
+        }
+        stage("Check Automation Result") {
+           steps {
+               dir("${automationdir}") {
+                   sh '''
+                        if grep -q "0" failed-test-summaries.log && grep -q "0" skipped-test-summaries.log; then 
+                            echo "Test run successfully! :)"
+                        else
+                            echo "There are failure/skip! :("
+                            exit 1
+                        fi
+                   ''' 
+               }
            }
         }
     }
