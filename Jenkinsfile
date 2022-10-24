@@ -4,7 +4,6 @@ pipeline {
     environment {
         app_name_basic = 'api-360-client-portal-frontend'
         basic_storage_endpoint = 'nanda-test/testing-postman-backend'
-        webhook_url = 'https://discord.com/api/webhooks/1030375663921803275/kLGXXrD2JY3WHnW3jBj2jKZ2zy6tQO2z6AcAp0dX6VfdutWbNREWFmbCjlzGmKV1T8Xj'
     }
     
     stages {
@@ -68,32 +67,30 @@ pipeline {
            }
         }
         // create stage to send link to qa
-        stage("Send Automation Result to Discord") {
-           steps {
-               sh """
-                    curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
-                    --data '{"content": "Result = https://storage.googleapis.com/${storage_endpoint}/report-${BUILD_NUMBER}.html"}' \
-                    ${webhook_url}
-               """
-           }
-        }
+//         stage("Send Automation Result to Discord") {
+//            steps {
+//                sh """
+//                     curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
+//                     --data '{"content": "Result = https://storage.googleapis.com/${storage_endpoint}/report-${BUILD_NUMBER}.html"}' \
+//                     ${webhook_url}
+//                """
+//            }
+//         }
         stage("Check Automation Result") {
            steps {
-               dir("${automationdir}") {
-                   sh """
-                        if grep -q "0" failed-test-summaries.log && grep -q "0" skipped-test-summaries.log; then 
-                            echo "Test run successfully! :)"
-                            curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
-                            --data '{"content": "Masuk"}' \
-                            ${webhook_url}
-                        else
-                            echo "There are failure/skip! :("
-                            curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
-                            --data '{"content": "Gagal"}' \
-                            ${webhook_url}
-                            exit 1
-                        fi
-                   """
+               dir("${automation_dir}") {
+                   // Add "exit 1" after echo "There are failure/skip! :(" if need to add blocker
+                   withCredentials([string(credentialsId: 'discord-webhook-url', variable: 'WEBHOOK_URL')]) {
+                        sh """
+                            if grep -q "Failures: 0, Skips: 0" report-${BUILD_NUMBER}.log; then 
+                                echo "Test run successfully! :)"
+                                curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data '{"content": "Test run successfully! :)"}' ${WEBHOOK_URL}
+                            else
+                                echo "There are failure/skip! :("
+                                curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data '{"content": "There are failure/skip! :("}' ${WEBHOOK_URL}
+                            fi
+                        """       
+                    }
                }
            }
         }
