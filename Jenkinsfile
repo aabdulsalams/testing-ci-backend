@@ -80,14 +80,20 @@ pipeline {
         stage("Check Automation Result") {
            steps {
                dir("${automationdir}") {
-                   sh '''
+                   sh """
                         if grep -q "0" failed-test-summaries.log && grep -q "0" skipped-test-summaries.log; then 
                             echo "Test run successfully! :)"
+                            curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
+                            --data '{"content": "Masuk"}' \
+                            ${webhook_url}
                         else
                             echo "There are failure/skip! :("
+                            curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST \
+                            --data '{"content": "Gagal"}' \
+                            ${webhook_url}
                             exit 1
                         fi
-                   ''' 
+                   """
                }
            }
         }
