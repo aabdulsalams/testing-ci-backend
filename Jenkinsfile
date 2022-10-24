@@ -78,7 +78,7 @@ pipeline {
 //         }
         stage("Check Automation Result") {
            steps {
-               dir("${automation_dir}") {
+               dir("${automationdir}") {
                    // Add "exit 1" after echo "There are failure/skip! :(" if need to add blocker
                    withCredentials([string(credentialsId: 'discord-webhook-url', variable: 'WEBHOOK_URL')]) {
                         sh """
